@@ -15,6 +15,7 @@ This corpus contains English learners’ texts extracted from the Lang-8 website
 language exchange social networking website geared towards language learners). It has
 100,051 English entries written by 29,012 active users. We used around 30,000 of these
 sentences in our dataset.
+Link: https://sites.google.com/site/naistlang8corpora/
 
 ● GLUE/CoLA:
 The Corpus of Linguistic Acceptability (CoLA) in its full form consists of 10657
@@ -24,6 +25,7 @@ We combined the two datasets in order to bring some diversity into our dataset, 
 grammatical error detection requires a vast number of sentences with varying levels of
 incorrectness. The dataset was then divided into train, development, and test sets in the
 ratio of 80:10:10.
+Link: https://nyu-mll.github.io/CoLA/
 
 ## The model is built using six layers as follows:-
 
