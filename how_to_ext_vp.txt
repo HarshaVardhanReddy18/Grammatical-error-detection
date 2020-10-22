@@ -1,0 +1,77 @@
+/* How to extract verb phrase from sentences */
+
+--------------------------------
+Example sentence :
+--------------------------------
+He has been working and writing until late and then went home.
+They kept talking on the phone.
+--------------------------------
+
+1. Identify part-of-speech of each word using Stanford Parser
+
+--------------------------------
+POS Tagging :
+--------------------------------
+He/PRP has/VBZ been/VBN working/VBG and/CC writing/VBG until/IN late/JJ and/CC then/RB went/VBD home/NN ./.
+They/PRP kept/VBD talking/VBG on/IN the/DT phone/NN ./.
+--------------------------------
+
+2. Identify tense & aspect of each verb phrase using part-of-speech by the algorithm below.
+
+--------------------------------
+Tense and Aspect
+--------------------------------
+has_been_working_and_writing : present progressive
+went : simple past
+kept : simple past
+talking : no tense and aspect
+--------------------------------
+* Although the first verb phrase should be divided by "and", we didn't implement that.
+
+--------------------------------
+Verb phrase extraction algorithm (Ruby)
+--------------------------------
+tense, p_ing, p_en, passive = "_", "_", "_", "_"
+_have, _be, _to = false, false, false
+
+verb_phrase.each do |word|
+	if word.pos =~ /VB/
+		case word.pos
+		when "VBN"
+			if _be
+				passive = "PASSIVE"
+			else
+				p_en = _have ? "PERFECT" : "PARTICIPLE"
+			end
+		when "VBD"
+			tense = "PAST"
+		when "VBG"
+			p_ing = _be ? "PROGRESSIVE" : "PARTICIPLE"
+		when "VB", "VBZ", "VBP"
+			tense = "PRESENT" if tense == "_"
+			tense = "INFINITIVE" if _to
+		end
+		
+		_have, _be, _to = false, false, false
+	end
+
+	case word.lemma
+	when "will"
+		tense = "FUTURE"
+	when "have"
+		_have = true
+	when "be"
+		_be = true
+	when "to"
+		_to = true
+	end
+end
+--------------------------------
+* the structure of verb_phrase
+example : "have lived"
+verb_phrase[0].pos = "VBP"
+verb_phrase[0].lemma = "have"
+verb_phrase[1].pos = "VBN"
+verb_phrase[1].lemma = "live"
+--------------------------------
+
